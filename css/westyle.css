@@ -1,0 +1,131 @@
+
+.current-info{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  font-weight: 50px;
+  color: #2b2719;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.date-container{
+  font-weight: 100;
+}
+.date-container .time{
+  font-size: 70px;
+  color: #eee;
+  font-family:'Roboto Mono'
+}
+
+.date-container #am-pm{
+  font-size: 30px;
+  margin-left: 20px;
+  color: #eee;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.date-container .date{
+  font-size: 30px;
+
+}
+
+.place-container{
+  text-align: end;
+}
+
+.place-container .time-zone{
+  font-weight: 500;
+  font-size: 56px;
+  color: #eee;
+}
+
+.place-container .country{
+  font-weight: 500;
+  font-size: 24px;
+  color: #eee;
+}
+
+.current-info .others{
+  display: flex;
+  flex-direction: column;
+  background: #8f8562;
+  padding:20px;
+  border-radius: 10px;
+  margin: 10px 0;
+  border: 1px solid #eee;
+}
+
+.current-info .others .weather-item{
+  display: flex;
+  justify-content: space-between;
+  
+}
+
+.future-forecast .today{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  bottom: 230px;
+  border-radius: 10px;
+  padding:15px;
+  padding-right: 10px;
+  border-radius: 10px;
+  
+  
+}
+
+
+
+.future-forecast .today .day{
+  padding: 5px 5px;
+  background: #eee;
+  border-radius: 50px;
+  text-align: center;
+  color:#2b2719;
+ 
+}
+
+.future-forecast .today .temp{
+  font-size: 18px;
+  padding-top: 15px;
+  color: #eee;
+ 
+  
+
+}
+
+.future-forecast .weather-forecast{
+  display: flex;
+  padding-left: 75px;
+  
+ 
+}
+
+.weather-forecast .weather-forecast-item{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+  border: 1px solid #eee;
+  background: rgb(131, 191, 235);
+  padding: 15px;
+  border-radius: 10px;
+  position: relative;
+  bottom: 105px;
+  
+}
+
+.weather-forecast .weather-forecast-item .day{
+  padding: 5px 15px;
+  background: #ffffff;
+  border-radius: 50px;
+  text-align: center;
+  
+}
+
+.weather-forecast .weather-forecast-item .temp{
+  font-weight: 500;
+  font-size: 12px;
+  color:#2b2719;
+}

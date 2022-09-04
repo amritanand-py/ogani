@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en-US">
+<head><meta charset="UTF-8"><script>if(navigator.userAgent.match(/MSIE|Internet Explorer/i)||navigator.userAgent.match(/Trident\/7\..*?rv:11/i)){var href=document.location.href;if(!href.match(/[?&]nowprocket/)){if(href.indexOf("?")==-1){if(href.indexOf("#")==-1){document.location.href=href+"?nowprocket=1"}else{document.location.href=href.replace("#","?nowprocket=1#")}}else{if(href.indexOf("#")==-1){document.location.href=href+"&nowprocket=1"}else{document.location.href=href.replace("#","&nowprocket=1#")}}}}</script><script>class RocketLazyLoadScripts{constructor(e){this.triggerEvents=e,this.eventOptions={passive:!0},this.userEventListener=this.triggerListener.bind(this),this.delayedScripts={normal:[],async:[],defer:[]},this.allJQueries=[]}_addUserInteractionListener(e){this.triggerEvents.forEach((t=>window.addEventListener(t,e.userEventListener,e.eventOptions)))}_removeUserInteractionListener(e){this.triggerEvents.forEach((t=>window.removeEventListener(t,e.userEventListener,e.eventOptions)))}triggerListener(){this._removeUserInteractionListener(this),"loading"===document.readyState?document.addEventListener("DOMContentLoaded",this._loadEverythingNow.bind(this)):this._loadEverythingNow()}async _loadEverythingNow(){this._delayEventListeners(),this._delayJQueryReady(this),this._handleDocumentWrite(),this._registerAllDelayedScripts(),this._preloadAllScripts(),await this._loadScriptsFromList(this.delayedScripts.normal),await this._loadScriptsFromList(this.delayedScripts.defer),await this._loadScriptsFromList(this.delayedScripts.async),await this._triggerDOMContentLoaded(),await this._triggerWindowLoad(),window.dispatchEvent(new Event("rocket-allScriptsLoaded"))}_registerAllDelayedScripts(){document.querySelectorAll("script[type=rocketlazyloadscript]").forEach((e=>{e.hasAttribute("src")?e.hasAttribute("async")&&!1!==e.async?this.delayedScripts.async.push(e):e.hasAttribute("defer")&&!1!==e.defer||"module"===e.getAttribute("data-rocket-type")?this.delayedScripts.defer.push(e):this.delayedScripts.normal.push(e):this.delayedScripts.normal.push(e)}))}async _transformScript(e){return await this._requestAnimFrame(),new Promise((t=>{const n=document.createElement("script");let r;[...e.attributes].forEach((e=>{let t=e.nodeName;"type"!==t&&("data-rocket-type"===t&&(t="type",r=e.nodeValue),n.setAttribute(t,e.nodeValue))})),e.hasAttribute("src")?(n.addEventListener("load",t),n.addEventListener("error",t)):(n.text=e.text,t()),e.parentNode.replaceChild(n,e)}))}async _loadScriptsFromList(e){const t=e.shift();return t?(await this._transformScript(t),this._loadScriptsFromList(e)):Promise.resolve()}_preloadAllScripts(){var e=document.createDocumentFragment();[...this.delayedScripts.normal,...this.delayedScripts.defer,...this.delayedScripts.async].forEach((t=>{const n=t.getAttribute("src");if(n){const t=document.createElement("link");t.href=n,t.rel="preload",t.as="script",e.appendChild(t)}})),document.head.appendChild(e)}_delayEventListeners(){let e={};function t(t,n){!function(t){function n(n){return e[t].eventsToRewrite.indexOf(n)>=0?"rocket-"+n:n}e[t]||(e[t]={originalFunctions:{add:t.addEventListener,remove:t.removeEventListener},eventsToRewrite:[]},t.addEventListener=function(){arguments[0]=n(arguments[0]),e[t].originalFunctions.add.apply(t,arguments)},t.removeEventListener=function(){arguments[0]=n(arguments[0]),e[t].originalFunctions.remove.apply(t,arguments)})}(t),e[t].eventsToRewrite.push(n)}function n(e,t){let n=e[t];Object.defineProperty(e,t,{get:()=>n||function(){},set(r){e["rocket"+t]=n=r}})}t(document,"DOMContentLoaded"),t(window,"DOMContentLoaded"),t(window,"load"),t(window,"pageshow"),t(document,"readystatechange"),n(document,"onreadystatechange"),n(window,"onload"),n(window,"onpageshow")}_delayJQueryReady(e){let t=window.jQuery;Object.defineProperty(window,"jQuery",{get:()=>t,set(n){if(n&&n.fn&&!e.allJQueries.includes(n)){n.fn.ready=n.fn.init.prototype.ready=function(t){e.domReadyFired?t.bind(document)(n):document.addEventListener("rocket-DOMContentLoaded",(()=>t.bind(document)(n)))};const t=n.fn.on;n.fn.on=n.fn.init.prototype.on=function(){if(this[0]===window){function e(e){return e.split(" ").map((e=>"load"===e||0===e.indexOf("load.")?"rocket-jquery-load":e)).join(" ")}"string"==typeof arguments[0]||arguments[0]instanceof String?arguments[0]=e(arguments[0]):"object"==typeof arguments[0]&&Object.keys(arguments[0]).forEach((t=>{delete Object.assign(arguments[0],{[e(t)]:arguments[0][t]})[t]}))}return t.apply(this,arguments),this},e.allJQueries.push(n)}t=n}})}async _triggerDOMContentLoaded(){this.domReadyFired=!0,await this._requestAnimFrame(),document.dispatchEvent(new Event("rocket-DOMContentLoaded")),await this._requestAnimFrame(),window.dispatchEvent(new Event("rocket-DOMContentLoaded")),await this._requestAnimFrame(),document.dispatchEvent(new Event("rocket-readystatechange")),await this._requestAnimFrame(),document.rocketonreadystatechange&&document.rocketonreadystatechange()}async _triggerWindowLoad(){await this._requestAnimFrame(),window.dispatchEvent(new Event("rocket-load")),await this._requestAnimFrame(),window.rocketonload&&window.rocketonload(),await this._requestAnimFrame(),this.allJQueries.forEach((e=>e(window).trigger("rocket-jquery-load"))),window.dispatchEvent(new Event("rocket-pageshow")),await this._requestAnimFrame(),window.rocketonpageshow&&window.rocketonpageshow()}_handleDocumentWrite(){const e=new Map;document.write=document.writeln=function(t){const n=document.currentScript,r=document.createRange(),i=n.parentElement;let o=e.get(n);void 0===o&&(o=n.nextSibling,e.set(n,o));const a=document.createDocumentFragment();r.setStart(a,0),a.appendChild(r.createContextualFragment(t)),i.insertBefore(a,o)}}async _requestAnimFrame(){return new Promise((e=>requestAnimationFrame(e)))}static run(){const e=new RocketLazyLoadScripts(["keydown","mousemove","touchmove","touchstart","touchend","wheel"]);e._addUserInteractionListener(e)}}RocketLazyLoadScripts.run();</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="profile" href="https://gmpg.org/xfn/11">
+<title>A farmer working in his field - Free Image by MUHAMMED RAHIL P on PixaHive.com</title><style id="rocket-critical-css">html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:block;margin-bottom:40px}h1{font-size:2em;margin:.67em 0}a{background-color:transparent}strong{font-weight:bolder}small{font-size:80%}img{border-style:none}input,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}input{overflow:visible}[type=button],[type=submit]{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=submit]::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=submit]:-moz-focusring{outline:1px dotted ButtonText}textarea{overflow:auto}[type=radio]{box-sizing:border-box;padding:0}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}*,*::before,*::after{box-sizing:inherit}html{box-sizing:border-box}body,input,textarea{font-family:-apple-system,BlinkMacSystemFont,segoe ui,Roboto,Oxygen-Sans,Ubuntu,Cantarell,helvetica neue,sans-serif;font-size:1rem;line-height:1.5}h1,h2,h3{clear:both}p{margin-bottom:1.5em}i{font-style:italic}body{background:#fff}ul{margin:0 0 1.5em 3em}ul{margin-left:15px;line-height:1.8em}ul{list-style:disc}li>ul{margin-bottom:0;margin-left:1.5em}img{height:auto;max-width:100%}a{color:#4169e1}input[type=button],input[type=submit]{border:1px solid;border-color:#ccc #ccc #bbb;border-radius:3px;background:#e6e6e6;color:rgba(0,0,0,.8);line-height:1;padding:.6em 1em .4em}input[type=search],textarea{color:#666;border:1px solid #ccc;border-radius:3px;padding:3px}textarea{width:100%}.md-4,.md-8{position:relative;min-height:1px;padding-left:15px;padding-right:15px}@media (min-width:992px){.md-4,.md-8{float:left}.md-8{width:66.66666667%}.md-4{width:33.33333333%}}body{color:#28375a;font-family:source sans pro,helvetica neue,Arial,Helvetica,sans-serif}.container{max-width:1270px;padding:0 15px;margin:auto}p{line-height:1.8em}main{overflow:auto}textarea{background:#e9edf7;border-color:#e9edf7;padding:10px!important}textarea{border-top-left-radius:3px;border-top-right-radius:3px;border-bottom-left-radius:3px;border-bottom-right-radius:3px;border-width:2px}input[type=submit]{background:#75914b;color:#fff;font-weight:700;padding:10px 15px;border:none;text-shadow:none}#masthead{border-bottom:solid 1px #eee;padding:15px 0;overflow:auto}#site-logo{max-width:166px}.site-branding{float:left}#top-search-form{float:left;padding:6px 8px;margin-left:10px}#top-search-form input[type=search]{border:solid 2px #ddd;padding:5px;width:350px;padding-left:33px}#top-search-form input[type=submit]{display:none}#top-search-form .fa-search{position:relative;left:30px}#top-search-form input[type=search]{border-color:#eaedf6;background:#eaedf6}@media screen and (min-width:1200px){#top-search-form input[type=search]{width:540px}}#top-menu{float:right}#top-member-menu{float:right;padding:8px 15px}#top-member-menu a{padding:6px 8px;display:inline-block;color:#28375a;text-decoration:none;border-radius:5px}#top-menu,#top-member-menu{padding:8px 15px;padding-left:0}#top-menu ul{list-style:none;margin:0}#top-menu ul li a{padding:6px 8px;display:inline-block;text-decoration:none;color:#28375a}#top-menu ul ul{visibility:hidden;transform:scaleY(0);position:absolute;background:#222;color:#eee;margin-left:0;padding:15px;width:250px;transform-origin:top;border-radius:5px;z-index:9999}#top-menu ul ul a{color:#eee;padding:3px 5px;display:inline-block;text-decoration:none}#top-social-links{padding:14px 0;float:right}#top-social-links a{padding:8px;border-radius:5px;color:#fff;margin-left:5px}#top-social-links a .fa{transform:scale(1.3)}#top-social-links a.fb{background:#3b5998}#top-social-links a.ig{background:#d6249f;background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%)}#top-social-links a.wa{background:#25d366}#mobile-menu-icons{display:none}@media screen and (max-width:767px){#masthead{overflow:hidden}#site-logo{max-height:50px;width:auto}#top-member-menu,#top-menu,#top-social-links{display:none}#top-search-wrapper{display:none}#top-search-form{display:block;width:100%;margin:0;position:relative}#top-search-form .fa-search{top:16px;left:22px;position:absolute}#top-search-form input[type=search]{width:100%}#mobile-menu-icons{display:block;float:right;padding:8px 0;font-size:18px}#mobile-menu-icons a{display:inline-block;padding:5px 10px;background:#420b0b;color:#fff;border-radius:6px;margin-left:8px;text-decoration:none}}@media screen and (max-width:360px){#site-logo{max-height:40px;width:auto}#mobile-menu-icons{position:relative;top:-6px}}.photo-single-wrapper{background:#e9ebf6;padding:40px 0;overflow:auto}.photo-single-wrapper .main-post-image{background:#fff;text-align:center}.photo-single-wrapper .featured-img{border:solid 10px #fff;height:auto;max-width:100%;max-height:570px}@media screen and (max-width:767px){.photo-box{margin-bottom:20px;padding:0}}.photo-details{background:#fff;overflow:auto;border:solid 10px #dee1f2;padding:10px 25px}.photo-details h1{font-size:24px;margin:10px;margin-bottom:5px}.photo-details .uploaded-on{color:rgba(40,55,90,.7);font-size:11px;text-transform:uppercase;letter-spacing:1px;padding:0 10px;border-bottom:solid 2px #eee;padding-bottom:15px;margin-bottom:15px}.download-box input[type=radio]{margin-bottom:12px;display:inline-block;margin-right:10px}.download-box .btn-download-image{background:#75914b;color:#fff;font-weight:700;margin-top:15px;margin-bottom:15px;padding:15px;border:none;width:100%;text-align:center}.photographer-meta{overflow:auto;border-top:solid 2px #eee;padding-top:25px;margin-top:15px}.photographer-meta img{border-radius:50%;vertical-align:middle}.photographer-meta .user-details{float:left}.photographer-meta .user-details small{color:rgba(40,55,90,.5)}.photographer-meta .user-details .user-avatar{display:inline-block;float:left}.photographer-meta .user-details .user-name{float:left;display:inline-block;padding:0 7px;position:relative;top:-8px}.photographer-meta .portfolio-link{float:right;display:inline-block}.photographer-meta .portfolio-link a{color:rgba(40,55,90,.5);border:solid 2px rgba(40,55,90,.5);border-radius:5px;padding:5px 15px;text-decoration:none;display:inline-block}.photo-license-information{padding:15px 0;padding-bottom:25px;margin-top:25px}.license-inner{padding:8px;background:#606c88;background:linear-gradient(to right,#3f4c6b,#606c88);color:#fff;border-radius:5px}.license-inner h3{font-size:18px;margin:0;color:#fff}.license-inner p{margin-bottom:0;text-shadow:1px 1px 3px rgba(0,0,0,.5);margin-top:2px;font-size:15px}.wrapper-tags{background:#fff;padding:40px 0;overflow:auto}.wrapper-tags .tag-link{display:inline-block;padding:6px 12px;border-radius:10px;text-decoration:none;color:#28375a;border:solid 2px rgba(40,55,90,.5);margin-right:10px;text-transform:capitalize;margin-top:2px;margin-bottom:2px}#respond input,#respond textarea{color:#28375a;outline:none}.single-download #respond textarea{background:#fff;border-color:#fff;padding:10px}</style><link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro%3Aital%2Cwght%400%2C400%3B0%2C700%3B1%2C400&#038;ver=5.7.7&#038;display=swap" /><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro%3Aital%2Cwght%400%2C400%3B0%2C700%3B1%2C400&#038;ver=5.7.7&#038;display=swap" media="print" onload="this.media='all'" /><noscript><link rel="preload" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro%3Aital%2Cwght%400%2C400%3B0%2C700%3B1%2C400&#038;ver=5.7.7&#038;display=swap" data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" /></noscript>
+<meta name='robots' content='max-image-preview:large' />
+
+<meta name="description" content="Free High Resolution Photo of Farmer and Working. Image by MUHAMMED RAHIL P. Image ID = 218886." />
+<meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+<link rel="canonical" href="https://pixahive.com/photo/a-farmer-working-in-his-field/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="A farmer working in his field - Free Image by MUHAMMED RAHIL P on PixaHive.com" />
+<meta property="og:description" content="Free High Resolution Photo of Farmer and Working. Image by MUHAMMED RAHIL P. Image ID = 218886." />
+<meta property="og:url" content="https://pixahive.com/photo/a-farmer-working-in-his-field/" />
+<meta property="og:site_name" content="PixaHive" />
+<meta property="article:publisher" content="https://www.facebook.com/pixahive/" />
+<meta property="og:image" content="https://pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive-683x1024.jpg" />
+<meta property="og:image:secure_url" content="https://pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive-683x1024.jpg" />
+<meta property="og:image:width" content="683" />
+<meta property="og:image:height" content="1024" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:description" content="Free High Resolution Photo of Farmer and Working. Image by MUHAMMED RAHIL P. Image ID = 218886." />
+<meta name="twitter:title" content="A farmer working in his field - Free Image by MUHAMMED RAHIL P on PixaHive.com" />
+<meta name="twitter:image" content="https://i1.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg?fit=1707%2C2560&#038;ssl=1" />
+<script type='application/ld+json' class='yoast-schema-graph yoast-schema-graph--main'>{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://pixahive.com/#website","url":"https://pixahive.com/","name":"PixaHive","description":"100% Free &amp; Public Domain Photos with CC0 License","potentialAction":{"@type":"SearchAction","target":"https://pixahive.com/?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"ImageObject","@id":"https://pixahive.com/photo/a-farmer-working-in-his-field/#primaryimage","url":"https://i1.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg?fit=1707%2C2560&ssl=1","width":1707,"height":2560},{"@type":"WebPage","@id":"https://pixahive.com/photo/a-farmer-working-in-his-field/#webpage","url":"https://pixahive.com/photo/a-farmer-working-in-his-field/","inLanguage":"en-US","name":"A farmer working in his field - Free Image by MUHAMMED RAHIL P on PixaHive.com","isPartOf":{"@id":"https://pixahive.com/#website"},"primaryImageOfPage":{"@id":"https://pixahive.com/photo/a-farmer-working-in-his-field/#primaryimage"},"datePublished":"2020-12-07T07:57:30+00:00","dateModified":"2022-09-01T07:41:05+00:00","description":"Free High Resolution Photo of Farmer and Working. Image by MUHAMMED RAHIL P. Image ID = 218886."}]}</script>
+
+<link rel='dns-prefetch' href='//ajax.googleapis.com' />
+<link rel='dns-prefetch' href='//www.google.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//i0.wp.com' />
+<link rel='dns-prefetch' href='//i1.wp.com' />
+<link rel='dns-prefetch' href='//i2.wp.com' />
+<link href='https://fonts.gstatic.com' crossorigin rel='preconnect' />
+<link rel="alternate" type="application/rss+xml" title="PixaHive &raquo; Feed" href="https://pixahive.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="PixaHive &raquo; Comments Feed" href="https://pixahive.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="PixaHive &raquo; A farmer working in his field Comments Feed" href="https://pixahive.com/photo/a-farmer-working-in-his-field/feed/" />
+<style>
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='preload' href='https://pixahive.com/wp-includes/css/dist/block-library/style.min.css?ver=5.7.7' data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" media='all' />
+<style id='wp-block-library-inline-css'>
+.has-text-align-justify{text-align:justify;}
+</style>
+<link rel='preload' href='https://pixahive.com/wp-includes/js/mediaelement/mediaelementplayer-legacy.min.css?ver=4.2.16' data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" media='all' />
+<link rel='preload' href='https://pixahive.com/wp-includes/js/mediaelement/wp-mediaelement.min.css?ver=5.7.7' data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" media='all' />
+<link rel='preload' href='https://pixahive.com/wp-content/plugins/easy-digital-downloads/templates/edd.min.css?ver=2.11.3.1' data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" media='all' />
+<link data-minify="1" rel='preload' href='https://pixahive.com/wp-content/cache/min/1/wp-content/themes/hive/style.css?ver=1637246403' data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" media='all' />
+<link data-minify="1" rel='preload' href='https://pixahive.com/wp-content/cache/min/1/wp-content/themes/hive/assets/css/frontend.css?ver=1637246403' data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" media='all' />
+<link data-minify="1" rel='preload' href='https://pixahive.com/wp-content/cache/min/1/wp-content/themes/hive/assets/libraries/font-awesome/css/font-awesome.min.css?ver=1637246403' data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" media='all' />
+<link data-minify="1" rel='preload' href='https://pixahive.com/wp-content/cache/min/1/wp-content/plugins/jetpack/css/jetpack.css?ver=1637246403' data-rocket-async="style" as="style" onload="this.onload=null;this.rel='stylesheet'" media='all' />
+<link rel="https://api.w.org/" href="https://pixahive.com/wp-json/" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://pixahive.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://pixahive.com/wp-includes/wlwmanifest.xml" />
+<meta name="generator" content="WordPress 5.7.7" />
+<link rel='shortlink' href='https://pixahive.com/?p=218886' />
+<link rel="alternate" type="application/json+oembed" href="https://pixahive.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fpixahive.com%2Fphoto%2Fa-farmer-working-in-his-field%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://pixahive.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fpixahive.com%2Fphoto%2Fa-farmer-working-in-his-field%2F&#038;format=xml" />
+<meta name="generator" content="Easy Digital Downloads v2.11.3.1" />
+<link rel="preload" as="font" href="https://pixahive.com/wp-content/themes/hive/assets/libraries/font-awesome/fonts/fontawesome-webfont.ttf" crossorigin>
+<link rel="preload" as="font" href="https://pixahive.com/wp-content/themes/hive/assets/libraries/font-awesome/fonts/fontawesome-webfont.woff" crossorigin>
+<link rel="preload" as="font" href="https://pixahive.com/wp-content/themes/hive/assets/libraries/font-awesome/fonts/FontAwesome.otf" crossorigin>
+<link rel="preload" as="font" href="https://pixahive.com/wp-content/themes/hive/assets/libraries/font-awesome/fonts/fontawesome-webfont.woff2" crossorigin>
+<link rel="preload" as="font" href="https://pixahive.com/wp-content/themes/hive/assets/libraries/font-awesome/fonts/fontawesome-webfont.woff2?v=4.6.3" crossorigin><meta name="generator" content="EDD FES v2.6.5" />
+<style type='text/css'>img#wpstats{display:none}</style>
+<style>.recentcomments a{display:inline !important;padding:0 !important;margin:0 !important;}</style>
+<script type="rocketlazyloadscript">
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '300695314564419');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=300695314564419&ev=PageView&noscript=1"
+/></noscript>
+
+
+<script type="rocketlazyloadscript" async src="https://www.googletagmanager.com/gtag/js?id=UA-176664151-1"></script>
+<script type="rocketlazyloadscript">
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-176664151-1');
+</script>
+<style id="wp-custom-css">
+			div.wp-block-jetpack-whatsapp-button a.whatsapp-block__button {
+	padding-top: 12px !important;
+}
+
+.page-id-138663 .wp-block-buttons {
+	text-align: center;
+}		</style>
+<noscript><style id="rocket-lazyload-nojs-css">.rll-youtube-player, [data-lazy-src]{display:none !important;}</style></noscript><script type="rocketlazyloadscript">
+/*! loadCSS rel=preload polyfill. [c]2017 Filament Group, Inc. MIT License */
+(function(w){"use strict";if(!w.loadCSS){w.loadCSS=function(){}}
+var rp=loadCSS.relpreload={};rp.support=(function(){var ret;try{ret=w.document.createElement("link").relList.supports("preload")}catch(e){ret=!1}
+return function(){return ret}})();rp.bindMediaToggle=function(link){var finalMedia=link.media||"all";function enableStylesheet(){link.media=finalMedia}
+if(link.addEventListener){link.addEventListener("load",enableStylesheet)}else if(link.attachEvent){link.attachEvent("onload",enableStylesheet)}
+setTimeout(function(){link.rel="stylesheet";link.media="only x"});setTimeout(enableStylesheet,3000)};rp.poly=function(){if(rp.support()){return}
+var links=w.document.getElementsByTagName("link");for(var i=0;i<links.length;i++){var link=links[i];if(link.rel==="preload"&&link.getAttribute("as")==="style"&&!link.getAttribute("data-loadcss")){link.setAttribute("data-loadcss",!0);rp.bindMediaToggle(link)}}};if(!rp.support()){rp.poly();var run=w.setInterval(rp.poly,500);if(w.addEventListener){w.addEventListener("load",function(){rp.poly();w.clearInterval(run)})}else if(w.attachEvent){w.attachEvent("onload",function(){rp.poly();w.clearInterval(run)})}}
+if(typeof exports!=="undefined"){exports.loadCSS=loadCSS}
+else{w.loadCSS=loadCSS}}(typeof global!=="undefined"?global:this))
+</script></head>
+<body class="download-template-default single single-download postid-218886 single-format-standard">
+<div id="page" class="site">
+<header id="masthead" class="site-header">
+<div class="container">
+<div class="site-branding">
+<a href="https://pixahive.com" rel="home">
+<picture>
+<source data-lazy-srcset="https://pixahive.com/wp-content/themes/hive/assets/images/logo-a.webp" type="image/webp">
+<source data-lazy-srcset="https://pixahive.com/wp-content/themes/hive/assets/images/logo-a.jpg" type="image/jpeg">
+<img id="site-logo" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="pixahive logo" data-lazy-src="https://pixahive.com/wp-content/themes/hive/assets/images/logo-a.jpg"><noscript><img id="site-logo" src="https://pixahive.com/wp-content/themes/hive/assets/images/logo-a.jpg" alt="pixahive logo"></noscript>
+</picture>
+</a>
+</div>
+<div id="mobile-menu-icons">
+<a class="toggle-menu" href="#"><i class="fa fa-bars"></i></a>
+<a href="https://pixahive.com/login/"><i class="fa fa-user"></i></a>
+<a id="open-search" href="#"><i class="fa fa-search"></i></a>
+</div>
+<div id="top-search-wrapper">
+<div id="top-search-form"><form class="search" action="https://pixahive.com/">
+<i class="fa fa-search"></i>
+<input type="search" name="s" placeholder="Search for free photos&hellip;">
+<input type="submit" value="Search">
+<input type="hidden" name="post_type" value="download">
+</form></div>
+</div>
+<div id="top-social-links">
+<a class="top-social-icon fb" target="_blank" href="https://facebook.com/pixahive/"><i class="fa fa-fw fa-facebook"></i></a>
+<a class="top-social-icon ig" target="_blank" href="https://instagram.com/pixahive/"><i class="fa fa-fw fa-instagram"></i></a>
+<a class="top-social-icon wa" target="_blank" rel="nofollow" href="https://wa.me/%2B918284056576?text=Hello"><i class="fa fa-fw fa-whatsapp"></i></a>
+</div>
+<nav id="top-member-menu">
+<a href="https://pixahive.com/register/"><i class="fa fa-user"></i> Login / Register</a>
+</nav>
+<nav id="top-menu">
+<div class="menu-main-menu-container"><ul id="primary-menu" class="menu"><li id="menu-item-6253" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-6253"><a href="#">Menu</a>
+<ul class="sub-menu">
+<li id="menu-item-6257" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6257"><a href="https://pixahive.com/photos/">Browse All Photos</a></li>
+<li id="menu-item-6254" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6254"><a href="https://pixahive.com/our-members/">Our Members</a></li>
+<li id="menu-item-6255" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6255"><a href="https://pixahive.com/contact-us/">Contact Us</a></li>
+<li id="menu-item-6256" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6256"><a href="https://pixahive.com/guidelines/">Guidelines for Image Submission</a></li>
+<li id="menu-item-464" class="menu-item menu-item-type-post_type menu-item-object-page current_page_parent menu-item-464"><a href="https://pixahive.com/blog/">Blog</a></li>
+<li id="menu-item-29800" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-29800"><a href="https://pixahive.com/contests/">Photography Contests</a></li>
+</ul>
+</li>
+</ul></div> </nav>
+</header>
+<main id="primary" class="site-main">
+<div class="photo-single-wrapper">
+<div class="container">
+<div class="photo-box md-8">
+<div class="main-post-image">
+<picture>
+<source data-lazy-srcset="https://i1.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg?fit=778%2C1167&ssl=1, https://i1.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg?fit=1560%2C2340&ssl=1 2x" media="(min-width: 992px)" />
+<source data-lazy-srcset="https://i1.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg?fit=992%2C1488&ssl=1, https://i1.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg?fit=1500%2C2250&ssl=1 2x" media="(min-width: 768px)" />
+<source data-lazy-srcset="https://i1.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg?fit=550%2C825&ssl=1" media="(min-width: 550px)" />
+<source data-lazy-srcset="https://i1.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg?fit=450%2C675&ssl=1" media="(min-width: 450px)" />
+<source data-lazy-srcset="https://i1.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg?fit=400%2C600&ssl=1" media="(min-width: 400px)" />
+<source data-lazy-srcset="https://i1.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg?fit=350%2C525&ssl=1" media="(min-width: 350px)" />
+<source data-lazy-srcset="https://i1.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg?fit=320%2C480&ssl=1" media="(min-width: 320px)" />
+<source data-lazy-srcset="https://i1.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg?fit=320%2C480&ssl=1" media="(max-width: 319px)" />
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="A farmer working in his field" class="featured-img img-responsive" data-lazy-src="https://pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg" /><noscript><img 
+									    src="https://pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg" 
+									    alt="A farmer working in his field"
+									    class="featured-img img-responsive"
+									/></noscript>
+</picture>
+<script type="application/ld+json">
+									{
+									  "@context": "http://schema.org",
+									  "@type": "ImageObject",
+									  "author": "MUHAMMED RAHIL P",
+									  "contentUrl": "https://pixahive.com/wp-content/uploads/2020/12/A-farmer-working-in-his-field-218886-pixahive.jpg",
+									  "name": "A farmer working in his field",
+									  "license": "https://creativecommons.org/share-your-work/public-domain/cc0/",
+									  "acquireLicensePage": "https://pixahive.com/photo/a-farmer-working-in-his-field/"
+									}
+								</script>
+</div>
+</div>
+<div class="photo-details md-4">
+<h1>A farmer working in his field</h1>
+<div class="uploaded-on">Uploaded On 7 December, 2020</div>
+<div class="download-box">
+<form id="download_image" method="post">
+<input type="radio" name="dsize" value="low" checked="checked"> Small (300px) <br />
+<input type="radio" name="dsize" value="med"> Medium (768px) <br />
+<input type="radio" name="dsize" value="high"> High (1024px) <br />
+<input type="radio" name="dsize" value="v-high"> Original File <br />
+<input type="hidden" id="postid" name="id" value="218886">
+<input type="button" class="btn-download-image" value="Download">
+</form>
+</div>
+<div class="photographer-meta">
+<div class="user-details">
+<div class="user-avatar">
+<img alt='' src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2040%2040'%3E%3C/svg%3E" data-lazy-srcset='https://secure.gravatar.com/avatar/6b51421573b0c4e775f992675f78739b?s=80&#038;d=mm&#038;r=g 2x' class='avatar avatar-40 photo' height='40' width='40' data-lazy-src="https://secure.gravatar.com/avatar/6b51421573b0c4e775f992675f78739b?s=40&#038;d=mm&#038;r=g" /><noscript><img alt='' src='https://secure.gravatar.com/avatar/6b51421573b0c4e775f992675f78739b?s=40&#038;d=mm&#038;r=g' srcset='https://secure.gravatar.com/avatar/6b51421573b0c4e775f992675f78739b?s=80&#038;d=mm&#038;r=g 2x' class='avatar avatar-40 photo' height='40' width='40' /></noscript> </div>
+<div class="user-name">
+<small>photograph by <br /></small>
+<Strong>Rahil</Strong>
+</div>
+</div>
+<div class="portfolio-link">
+<a href="https://pixahive.com/portfolio/shutter-bugg-_">View Portfolio</a>
+</div>
+</div>
+<div class="photo-license-information">
+<div class="license-inner">
+<h3><i class="fa fa-check-square"></i> License</h3>
+<p>CC0 - Free to Use, Attribution Optional</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="wrapper-tags">
+<div class="container">
+<div class="tags">
+<h2>Image Tags</h2>
+<div class="all-image-tags">
+<a class="tag-link" href="https://pixahive.com/photo/tag/agriculture/">Agriculture</a><a class="tag-link" href="https://pixahive.com/photo/tag/farmer/">farmer</a><a class="tag-link" href="https://pixahive.com/photo/tag/village/">Village</a><a class="tag-link" href="https://pixahive.com/photo/tag/working/">Working</a> </div>
+</div>
+<div class="related-images">
+<h2>Similar Images</h2>
+<div class="related-images-grid">
+<div class="related-image" data-w="2560" data-h="2481">
+<a href="https://pixahive.com/photo/illustration-of-a-working-woman/">
+<picture>
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2021/04/Lady-illustration-monalisa-illustrations-416096-pixahive.jpg?fit=500%2C484&ssl=1, https://i0.wp.com/pixahive.com/wp-content/uploads/2021/04/Lady-illustration-monalisa-illustrations-416096-pixahive.jpg?fit=1000%2C969&ssl=1 2x" media="(min-width: 500px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2021/04/Lady-illustration-monalisa-illustrations-416096-pixahive.jpg?fit=450%2C436&ssl=1" media="(min-width: 450px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2021/04/Lady-illustration-monalisa-illustrations-416096-pixahive.jpg?fit=400%2C387&ssl=1" media="(min-width: 400px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2021/04/Lady-illustration-monalisa-illustrations-416096-pixahive.jpg?fit=350%2C339&ssl=1" media="(min-width: 350px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2021/04/Lady-illustration-monalisa-illustrations-416096-pixahive.jpg?fit=320%2C310&ssl=1" media="(min-width: 320px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2021/04/Lady-illustration-monalisa-illustrations-416096-pixahive.jpg?fit=320%2C310&ssl=1" media="(max-width: 319px)" />
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Illustration of a working woman" data-lazy-src="https://pixahive.com/wp-content/uploads/2021/04/Lady-illustration-monalisa-illustrations-416096-pixahive.jpg" /><noscript><img 
+													    src="https://pixahive.com/wp-content/uploads/2021/04/Lady-illustration-monalisa-illustrations-416096-pixahive.jpg" 
+													    alt="Illustration of a working woman"
+													/></noscript>
+</picture>
+</a>
+<script type="application/ld+json">
+												{
+												  "@context": "http://schema.org",
+												  "@type": "ImageObject",
+												  "contentUrl": "https://pixahive.com/wp-content/uploads/2021/04/Lady-illustration-monalisa-illustrations-416096-pixahive.jpg",
+												  "name": "Illustration of a working woman",
+												  "license": "https://creativecommons.org/share-your-work/public-domain/cc0/",
+												  "acquireLicensePage": "https://pixahive.com/photo/illustration-of-a-working-woman/"
+												}
+											</script>
+</div>
+<div class="related-image" data-w="2500" data-h="1667">
+<a href="https://pixahive.com/photo/a-farmer-working-in-the-paddy-field-3/">
+<picture>
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410871-pixahive.jpg?fit=500%2C333&ssl=1, https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410871-pixahive.jpg?fit=1000%2C666&ssl=1 2x" media="(min-width: 500px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410871-pixahive.jpg?fit=450%2C300&ssl=1" media="(min-width: 450px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410871-pixahive.jpg?fit=400%2C266&ssl=1" media="(min-width: 400px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410871-pixahive.jpg?fit=350%2C233&ssl=1" media="(min-width: 350px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410871-pixahive.jpg?fit=320%2C213&ssl=1" media="(min-width: 320px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410871-pixahive.jpg?fit=320%2C213&ssl=1" media="(max-width: 319px)" />
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Farmer in filed" data-lazy-src="https://pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410871-pixahive.jpg" /><noscript><img 
+													    src="https://pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410871-pixahive.jpg" 
+													    alt="Farmer in filed"
+													/></noscript>
+</picture>
+</a>
+<script type="application/ld+json">
+												{
+												  "@context": "http://schema.org",
+												  "@type": "ImageObject",
+												  "contentUrl": "https://pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410871-pixahive.jpg",
+												  "name": "A Farmer working in the Paddy Field",
+												  "license": "https://creativecommons.org/share-your-work/public-domain/cc0/",
+												  "acquireLicensePage": "https://pixahive.com/photo/a-farmer-working-in-the-paddy-field-3/"
+												}
+											</script>
+</div>
+<div class="related-image" data-w="2500" data-h="1667">
+<a href="https://pixahive.com/photo/a-farmer-working-in-the-paddy-field-2/">
+<picture>
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410892-pixahive.jpg?fit=500%2C333&ssl=1, https://i0.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410892-pixahive.jpg?fit=1000%2C666&ssl=1 2x" media="(min-width: 500px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410892-pixahive.jpg?fit=450%2C300&ssl=1" media="(min-width: 450px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410892-pixahive.jpg?fit=400%2C266&ssl=1" media="(min-width: 400px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410892-pixahive.jpg?fit=350%2C233&ssl=1" media="(min-width: 350px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410892-pixahive.jpg?fit=320%2C213&ssl=1" media="(min-width: 320px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410892-pixahive.jpg?fit=320%2C213&ssl=1" media="(max-width: 319px)" />
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Farmer in field" data-lazy-src="https://pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410892-pixahive.jpg" /><noscript><img 
+													    src="https://pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410892-pixahive.jpg" 
+													    alt="Farmer in field"
+													/></noscript>
+</picture>
+</a>
+<script type="application/ld+json">
+												{
+												  "@context": "http://schema.org",
+												  "@type": "ImageObject",
+												  "contentUrl": "https://pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410892-pixahive.jpg",
+												  "name": "A Farmer working in the Paddy Field",
+												  "license": "https://creativecommons.org/share-your-work/public-domain/cc0/",
+												  "acquireLicensePage": "https://pixahive.com/photo/a-farmer-working-in-the-paddy-field-2/"
+												}
+											</script>
+</div>
+<div class="related-image" data-w="2500" data-h="1667">
+<a href="https://pixahive.com/photo/a-farmer-working-in-the-paddy-field/">
+<picture>
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410906-pixahive.jpg?fit=500%2C333&ssl=1, https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410906-pixahive.jpg?fit=1000%2C666&ssl=1 2x" media="(min-width: 500px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410906-pixahive.jpg?fit=450%2C300&ssl=1" media="(min-width: 450px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410906-pixahive.jpg?fit=400%2C266&ssl=1" media="(min-width: 400px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410906-pixahive.jpg?fit=350%2C233&ssl=1" media="(min-width: 350px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410906-pixahive.jpg?fit=320%2C213&ssl=1" media="(min-width: 320px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410906-pixahive.jpg?fit=320%2C213&ssl=1" media="(max-width: 319px)" />
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="A Farmer working in the Paddy Field" data-lazy-src="https://pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410906-pixahive.jpg" /><noscript><img 
+													    src="https://pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410906-pixahive.jpg" 
+													    alt="A Farmer working in the Paddy Field"
+													/></noscript>
+</picture>
+</a>
+<script type="application/ld+json">
+												{
+												  "@context": "http://schema.org",
+												  "@type": "ImageObject",
+												  "contentUrl": "https://pixahive.com/wp-content/uploads/2021/04/A-Farmer-working-in-the-Paddy-Field-410906-pixahive.jpg",
+												  "name": "A Farmer working in the Paddy Field",
+												  "license": "https://creativecommons.org/share-your-work/public-domain/cc0/",
+												  "acquireLicensePage": "https://pixahive.com/photo/a-farmer-working-in-the-paddy-field/"
+												}
+											</script>
+</div>
+<div class="related-image" data-w="2500" data-h="1667">
+<a href="https://pixahive.com/photo/women-farmers-working-in-the-paddy-field/">
+<picture>
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/Women-Farmers-working-in-the-Paddy-Field-410878-pixahive.jpg?fit=500%2C333&ssl=1, https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/Women-Farmers-working-in-the-Paddy-Field-410878-pixahive.jpg?fit=1000%2C666&ssl=1 2x" media="(min-width: 500px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/Women-Farmers-working-in-the-Paddy-Field-410878-pixahive.jpg?fit=450%2C300&ssl=1" media="(min-width: 450px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/Women-Farmers-working-in-the-Paddy-Field-410878-pixahive.jpg?fit=400%2C266&ssl=1" media="(min-width: 400px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/Women-Farmers-working-in-the-Paddy-Field-410878-pixahive.jpg?fit=350%2C233&ssl=1" media="(min-width: 350px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/Women-Farmers-working-in-the-Paddy-Field-410878-pixahive.jpg?fit=320%2C213&ssl=1" media="(min-width: 320px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/04/Women-Farmers-working-in-the-Paddy-Field-410878-pixahive.jpg?fit=320%2C213&ssl=1" media="(max-width: 319px)" />
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Farmers in field" data-lazy-src="https://pixahive.com/wp-content/uploads/2021/04/Women-Farmers-working-in-the-Paddy-Field-410878-pixahive.jpg" /><noscript><img 
+													    src="https://pixahive.com/wp-content/uploads/2021/04/Women-Farmers-working-in-the-Paddy-Field-410878-pixahive.jpg" 
+													    alt="Farmers in field"
+													/></noscript>
+</picture>
+</a>
+<script type="application/ld+json">
+												{
+												  "@context": "http://schema.org",
+												  "@type": "ImageObject",
+												  "contentUrl": "https://pixahive.com/wp-content/uploads/2021/04/Women-Farmers-working-in-the-Paddy-Field-410878-pixahive.jpg",
+												  "name": "Women Farmers working in the Paddy Field",
+												  "license": "https://creativecommons.org/share-your-work/public-domain/cc0/",
+												  "acquireLicensePage": "https://pixahive.com/photo/women-farmers-working-in-the-paddy-field/"
+												}
+											</script>
+</div>
+<div class="related-image" data-w="2560" data-h="1706">
+<a href="https://pixahive.com/photo/farmer-crop-harvesting-in-the-farm/">
+<picture>
+<source data-lazy-srcset="https://i1.wp.com/pixahive.com/wp-content/uploads/2021/04/Farmer-crop-harvesting-in-the-farm-405760-pixahive.jpg?fit=500%2C333&ssl=1, https://i1.wp.com/pixahive.com/wp-content/uploads/2021/04/Farmer-crop-harvesting-in-the-farm-405760-pixahive.jpg?fit=1000%2C666&ssl=1 2x" media="(min-width: 500px)" />
+<source data-lazy-srcset="https://i1.wp.com/pixahive.com/wp-content/uploads/2021/04/Farmer-crop-harvesting-in-the-farm-405760-pixahive.jpg?fit=450%2C299&ssl=1" media="(min-width: 450px)" />
+<source data-lazy-srcset="https://i1.wp.com/pixahive.com/wp-content/uploads/2021/04/Farmer-crop-harvesting-in-the-farm-405760-pixahive.jpg?fit=400%2C266&ssl=1" media="(min-width: 400px)" />
+<source data-lazy-srcset="https://i1.wp.com/pixahive.com/wp-content/uploads/2021/04/Farmer-crop-harvesting-in-the-farm-405760-pixahive.jpg?fit=350%2C233&ssl=1" media="(min-width: 350px)" />
+<source data-lazy-srcset="https://i1.wp.com/pixahive.com/wp-content/uploads/2021/04/Farmer-crop-harvesting-in-the-farm-405760-pixahive.jpg?fit=320%2C213&ssl=1" media="(min-width: 320px)" />
+<source data-lazy-srcset="https://i1.wp.com/pixahive.com/wp-content/uploads/2021/04/Farmer-crop-harvesting-in-the-farm-405760-pixahive.jpg?fit=320%2C213&ssl=1" media="(max-width: 319px)" />
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Farmer crop harvesting in the farm" data-lazy-src="https://pixahive.com/wp-content/uploads/2021/04/Farmer-crop-harvesting-in-the-farm-405760-pixahive.jpg" /><noscript><img 
+													    src="https://pixahive.com/wp-content/uploads/2021/04/Farmer-crop-harvesting-in-the-farm-405760-pixahive.jpg" 
+													    alt="Farmer crop harvesting in the farm"
+													/></noscript>
+</picture>
+</a>
+<script type="application/ld+json">
+												{
+												  "@context": "http://schema.org",
+												  "@type": "ImageObject",
+												  "contentUrl": "https://pixahive.com/wp-content/uploads/2021/04/Farmer-crop-harvesting-in-the-farm-405760-pixahive.jpg",
+												  "name": "Farmer crop harvesting in the farm",
+												  "license": "https://creativecommons.org/share-your-work/public-domain/cc0/",
+												  "acquireLicensePage": "https://pixahive.com/photo/farmer-crop-harvesting-in-the-farm/"
+												}
+											</script>
+</div>
+<div class="related-image" data-w="1920" data-h="2560">
+<a href="https://pixahive.com/photo/two-little-kids-working-with-shovel/">
+<picture>
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/03/Two-little-kids-working-with-shovel-393453-pixahive.jpg?fit=500%2C666&ssl=1, https://i2.wp.com/pixahive.com/wp-content/uploads/2021/03/Two-little-kids-working-with-shovel-393453-pixahive.jpg?fit=1000%2C1333&ssl=1 2x" media="(min-width: 500px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/03/Two-little-kids-working-with-shovel-393453-pixahive.jpg?fit=450%2C600&ssl=1" media="(min-width: 450px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/03/Two-little-kids-working-with-shovel-393453-pixahive.jpg?fit=400%2C533&ssl=1" media="(min-width: 400px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/03/Two-little-kids-working-with-shovel-393453-pixahive.jpg?fit=350%2C466&ssl=1" media="(min-width: 350px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/03/Two-little-kids-working-with-shovel-393453-pixahive.jpg?fit=320%2C426&ssl=1" media="(min-width: 320px)" />
+<source data-lazy-srcset="https://i2.wp.com/pixahive.com/wp-content/uploads/2021/03/Two-little-kids-working-with-shovel-393453-pixahive.jpg?fit=320%2C426&ssl=1" media="(max-width: 319px)" />
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="Two little kids working with shovel" data-lazy-src="https://pixahive.com/wp-content/uploads/2021/03/Two-little-kids-working-with-shovel-393453-pixahive.jpg" /><noscript><img 
+													    src="https://pixahive.com/wp-content/uploads/2021/03/Two-little-kids-working-with-shovel-393453-pixahive.jpg" 
+													    alt="Two little kids working with shovel"
+													/></noscript>
+</picture>
+</a>
+<script type="application/ld+json">
+												{
+												  "@context": "http://schema.org",
+												  "@type": "ImageObject",
+												  "contentUrl": "https://pixahive.com/wp-content/uploads/2021/03/Two-little-kids-working-with-shovel-393453-pixahive.jpg",
+												  "name": "Two little kids working with shovel",
+												  "license": "https://creativecommons.org/share-your-work/public-domain/cc0/",
+												  "acquireLicensePage": "https://pixahive.com/photo/two-little-kids-working-with-shovel/"
+												}
+											</script>
+</div>
+<div class="related-image" data-w="1707" data-h="2560">
+<a href="https://pixahive.com/photo/a-farmer-5/">
+<picture>
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-261057-pixahive.jpg?fit=500%2C749&ssl=1, https://i0.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-261057-pixahive.jpg?fit=1000%2C1499&ssl=1 2x" media="(min-width: 500px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-261057-pixahive.jpg?fit=450%2C674&ssl=1" media="(min-width: 450px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-261057-pixahive.jpg?fit=400%2C599&ssl=1" media="(min-width: 400px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-261057-pixahive.jpg?fit=350%2C524&ssl=1" media="(min-width: 350px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-261057-pixahive.jpg?fit=320%2C479&ssl=1" media="(min-width: 320px)" />
+<source data-lazy-srcset="https://i0.wp.com/pixahive.com/wp-content/uploads/2020/12/A-farmer-261057-pixahive.jpg?fit=320%2C479&ssl=1" media="(max-width: 319px)" />
+<img src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="A farmer" data-lazy-src="https://pixahive.com/wp-content/uploads/2020/12/A-farmer-261057-pixahive.jpg" /><noscript><img 
+													    src="https://pixahive.com/wp-content/uploads/2020/12/A-farmer-261057-pixahive.jpg" 
+													    alt="A farmer"
+													/></noscript>
+</picture>
+</a>
+<script type="application/ld+json">
+												{
+												  "@context": "http://schema.org",
+												  "@type": "ImageObject",
+												  "contentUrl": "https://pixahive.com/wp-content/uploads/2020/12/A-farmer-261057-pixahive.jpg",
+												  "name": "A farmer",
+												  "license": "https://creativecommons.org/share-your-work/public-domain/cc0/",
+												  "acquireLicensePage": "https://pixahive.com/photo/a-farmer-5/"
+												}
+											</script>
+</div>
+</div>
+</div>
+<div class="exif-data">
+<h2 class="section-title">EXIF Data</h2>
+<div class="exif-section col-md-4">
+<strong>Camera : </strong> Canon EOS 200D </div>
+<div class="exif-section col-md-4">
+<strong>Aperture : </strong> 6.3 </div>
+<div class="exif-section col-md-4">
+<strong>Focal Length : </strong> 47 </div>
+<div class="exif-section col-md-4">
+<strong>ISO : </strong> 100 </div>
+<div class="exif-section col-md-4">
+<strong>Shutter Speed : </strong> 1/400 </div>
+<div class="exif-section col-md-4">
+<strong>Timestamp: </strong> 28 Aug 2020 @ 9:56 pm </div>
+</div>
+</div>
+</div>
+<div class="wrapper-tags wrapper-comments">
+<div class="container">
+<div id="comments" class="comments-area">
+<div id="respond" class="comment-respond">
+<h3 id="reply-title" class="comment-reply-title">Leave a Reply <small><a rel="nofollow" id="cancel-comment-reply-link" href="/photo/a-farmer-working-in-his-field/#respond" style="display:none;">Cancel reply</a></small></h3><form action="https://pixahive.com/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-notes"><span id="email-notes">Your email address will not be published.</span> Required fields are marked <span class="required">*</span></p><p class="comment-form-comment"><label for="comment">Comment</label> <textarea id="comment" name="comment" cols="45" rows="8" maxlength="65525" required="required"></textarea></p><p class="comment-form-author"><label for="author">Name <span class="required">*</span></label> <input id="author" name="author" type="text" value="" size="30" maxlength="245" required='required' /></p>
+<p class="comment-form-email"><label for="email">Email <span class="required">*</span></label> <input id="email" name="email" type="email" value="" size="30" maxlength="100" aria-describedby="email-notes" required='required' /></p>
+<p class="comment-form-url"><label for="url">Website</label> <input id="url" name="url" type="url" value="" size="30" maxlength="200" /></p>
+<p class="comment-form-cookies-consent"><input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes" /> <label for="wp-comment-cookies-consent">Save my name, email, and website in this browser for the next time I comment.</label></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='218886' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="0ed621e6fe" /></p><p style="display: none !important;"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="113" /><script type="rocketlazyloadscript">document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form> </div>
+</div>
+</div>
+</div>
+</main>
+<footer id="colophon" class="site-footer">
+<div class="container">
+<div class="site-info md-4">
+© Pixahive.com - 2020. Some Rights Reserved.
+</div>
+<div id="footer-menu-wrapper" class="md-8">
+<div class="menu-footer-menu-container"><ul id="footer-menu" class="menu"><li id="menu-item-4870" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-4870"><a href="https://pixahive.com/">Home</a></li>
+<li id="menu-item-4871" class="menu-item menu-item-type-post_type menu-item-object-page current_page_parent menu-item-4871"><a href="https://pixahive.com/blog/">Blog</a></li>
+<li id="menu-item-4872" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4872"><a href="https://pixahive.com/about/">About</a></li>
+<li id="menu-item-4873" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4873"><a href="https://pixahive.com/contact-us/">Contact Us</a></li>
+<li id="menu-item-4875" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4875"><a href="https://pixahive.com/privacy-policy/">Privacy Policy</a></li>
+<li id="menu-item-4876" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-4876"><a href="https://pixahive.com/terms/">Terms &amp; Conditions</a></li>
+</ul></div> </div>
+</div>
+</footer>
+<div id="mobile-sidebar">
+<div class="footer-branding">
+<a href="https://pixahive.com" rel="home">
+<picture>
+<source data-lazy-srcset="https://pixahive.com/wp-content/themes/hive/assets/images/pixahive-dark-logo-min.webp" type="image/webp">
+<source data-lazy-srcset="https://pixahive.com/wp-content/themes/hive/assets/images/pixahive-dark-logo-min.jpg" type="image/jpeg">
+<img id="site-logo" src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%200%200'%3E%3C/svg%3E" alt="pixahive logo dark" data-lazy-src="https://pixahive.com/wp-content/themes/hive/assets/images/pixahive-dark-logo-min.jpg"><noscript><img id="site-logo" src="https://pixahive.com/wp-content/themes/hive/assets/images/pixahive-dark-logo-min.jpg" alt="pixahive logo dark"></noscript>
+</picture>
+</a>
+<a class="toggle-menu" href="#"><i class="fa fa-fw fa-plus"></i></a>
+</div>
+<a target="_blank" href="https://instagram.com/pixahive/" class="social-link ig"><i class="fa fa-fw fa-instagram"></i> Follow @pixahive</a>
+<a target="_blank" href="https://facebook.com/pixahive/" class="social-link fb"><i class="fa fa-fw fa-facebook-square"></i> Our Facebook Page</a>
+<a target="_blank" rel="nofollow" href="https://wa.me/%2B918284056576?text=Hello" class="social-link wa"><i class="fa fa-fw fa-whatsapp"></i> Message on WhatsApp</a>
+<div class="menu-mobile-menu-container"><ul id="sidebar-menu" class="menu"><li id="menu-item-3242" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-3242"><a href="https://pixahive.com/">Home</a></li>
+<li id="menu-item-6323" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6323"><a href="https://pixahive.com/photos/">Photos</a></li>
+<li id="menu-item-6320" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6320"><a href="https://pixahive.com/dashboard/">My Dashboard</a></li>
+<li id="menu-item-3240" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3240"><a href="https://pixahive.com/login/">Login / Register</a></li>
+<li id="menu-item-3243" class="menu-item menu-item-type-post_type menu-item-object-page current_page_parent menu-item-3243"><a href="https://pixahive.com/blog/">Blog</a></li>
+<li id="menu-item-3241" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-3241"><a href="https://pixahive.com/contact-us/">Contact Us</a></li>
+<li id="menu-item-6321" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6321"><a href="https://pixahive.com/guidelines/">Guidelines for Image Submission</a></li>
+<li id="menu-item-6322" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-6322"><a href="https://pixahive.com/our-members/">Our Members</a></li>
+<li id="menu-item-140094" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-140094"><a href="https://pixahive.com/contests/">Photography Contests</a></li>
+</ul></div> </div>
+</div>
+<script type="rocketlazyloadscript" src='https://pixahive.com/wp-content/plugins/jetpack/_inc/build/photon/photon.min.js?ver=20191001' id='jetpack-photon-js' defer></script>
+<script type="rocketlazyloadscript" data-minify="1" src='https://pixahive.com/wp-content/cache/min/1/ajax/libs/jquery/1.12.4/jquery.min.js?ver=1637246404' id='jquery-js'></script>
+<script id='edd-ajax-js-extra'>
+var edd_scripts = {"ajaxurl":"https:\/\/pixahive.com\/wp-admin\/admin-ajax.php","position_in_cart":"","has_purchase_links":"","already_in_cart_message":"You have already added this item to your cart","empty_cart_message":"Your cart is empty","loading":"Loading","select_option":"Please select an option","is_checkout":"0","default_gateway":"","redirect_to_checkout":"0","checkout_page":"https:\/\/pixahive.com\/checkout\/","permalinks":"1","quantities_enabled":"","taxes_enabled":"0"};
+</script>
+<script type="rocketlazyloadscript" src='https://pixahive.com/wp-content/plugins/easy-digital-downloads/assets/js/edd-ajax.min.js?ver=2.11.3.1' id='edd-ajax-js' defer></script>
+<script type="rocketlazyloadscript" id='rocket-browser-checker-js-after'>
+"use strict";var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||!1,descriptor.configurable=!0,"value"in descriptor&&(descriptor.writable=!0),Object.defineProperty(target,descriptor.key,descriptor)}}return function(Constructor,protoProps,staticProps){return protoProps&&defineProperties(Constructor.prototype,protoProps),staticProps&&defineProperties(Constructor,staticProps),Constructor}}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor))throw new TypeError("Cannot call a class as a function")}var RocketBrowserCompatibilityChecker=function(){function RocketBrowserCompatibilityChecker(options){_classCallCheck(this,RocketBrowserCompatibilityChecker),this.passiveSupported=!1,this._checkPassiveOption(this),this.options=!!this.passiveSupported&&options}return _createClass(RocketBrowserCompatibilityChecker,[{key:"_checkPassiveOption",value:function(self){try{var options={get passive(){return!(self.passiveSupported=!0)}};window.addEventListener("test",null,options),window.removeEventListener("test",null,options)}catch(err){self.passiveSupported=!1}}},{key:"initRequestIdleCallback",value:function(){!1 in window&&(window.requestIdleCallback=function(cb){var start=Date.now();return setTimeout(function(){cb({didTimeout:!1,timeRemaining:function(){return Math.max(0,50-(Date.now()-start))}})},1)}),!1 in window&&(window.cancelIdleCallback=function(id){return clearTimeout(id)})}},{key:"isDataSaverModeOn",value:function(){return"connection"in navigator&&!0===navigator.connection.saveData}},{key:"supportsLinkPrefetch",value:function(){var elem=document.createElement("link");return elem.relList&&elem.relList.supports&&elem.relList.supports("prefetch")&&window.IntersectionObserver&&"isIntersecting"in IntersectionObserverEntry.prototype}},{key:"isSlowConnection",value:function(){return"connection"in navigator&&"effectiveType"in navigator.connection&&("2g"===navigator.connection.effectiveType||"slow-2g"===navigator.connection.effectiveType)}}]),RocketBrowserCompatibilityChecker}();
+</script>
+<script id='rocket-preload-links-js-extra'>
+var RocketPreloadLinksConfig = {"excludeUris":"\/login\/|\/register\/|\/dashboard\/|\/tagger-2\/|\/pending\/|\/trash\/|\/(.+\/)?feed\/?.+\/?|\/(?:.+\/)?embed\/|(.*)\/a-farmer-working-in-his-field\/|\/checkout\/|\/(index\\.php\/)?wp\\-json(\/.*|$)|\/wp-admin\/|\/logout\/|\/login","usesTrailingSlash":"1","imageExt":"jpg|jpeg|gif|png|tiff|bmp|webp|avif","fileExt":"jpg|jpeg|gif|png|tiff|bmp|webp|avif|php|pdf|html|htm","siteUrl":"https:\/\/pixahive.com","onHoverDelay":"100","rateThrottle":"3"};
+</script>
+<script type="rocketlazyloadscript" id='rocket-preload-links-js-after'>
+(function() {
+"use strict";var r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},e=function(){function i(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,i.key,i)}}return function(e,t,n){return t&&i(e.prototype,t),n&&i(e,n),e}}();function i(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}var t=function(){function n(e,t){i(this,n),this.browser=e,this.config=t,this.options=this.browser.options,this.prefetched=new Set,this.eventTime=null,this.threshold=1111,this.numOnHover=0}return e(n,[{key:"init",value:function(){!this.browser.supportsLinkPrefetch()||this.browser.isDataSaverModeOn()||this.browser.isSlowConnection()||(this.regex={excludeUris:RegExp(this.config.excludeUris,"i"),images:RegExp(".("+this.config.imageExt+")$","i"),fileExt:RegExp(".("+this.config.fileExt+")$","i")},this._initListeners(this))}},{key:"_initListeners",value:function(e){-1<this.config.onHoverDelay&&document.addEventListener("mouseover",e.listener.bind(e),e.listenerOptions),document.addEventListener("mousedown",e.listener.bind(e),e.listenerOptions),document.addEventListener("touchstart",e.listener.bind(e),e.listenerOptions)}},{key:"listener",value:function(e){var t=e.target.closest("a"),n=this._prepareUrl(t);if(null!==n)switch(e.type){case"mousedown":case"touchstart":this._addPrefetchLink(n);break;case"mouseover":this._earlyPrefetch(t,n,"mouseout")}}},{key:"_earlyPrefetch",value:function(t,e,n){var i=this,r=setTimeout(function(){if(r=null,0===i.numOnHover)setTimeout(function(){return i.numOnHover=0},1e3);else if(i.numOnHover>i.config.rateThrottle)return;i.numOnHover++,i._addPrefetchLink(e)},this.config.onHoverDelay);t.addEventListener(n,function e(){t.removeEventListener(n,e,{passive:!0}),null!==r&&(clearTimeout(r),r=null)},{passive:!0})}},{key:"_addPrefetchLink",value:function(i){return this.prefetched.add(i.href),new Promise(function(e,t){var n=document.createElement("link");n.rel="prefetch",n.href=i.href,n.onload=e,n.onerror=t,document.head.appendChild(n)}).catch(function(){})}},{key:"_prepareUrl",value:function(e){if(null===e||"object"!==(void 0===e?"undefined":r(e))||!1 in e||-1===["http:","https:"].indexOf(e.protocol))return null;var t=e.href.substring(0,this.config.siteUrl.length),n=this._getPathname(e.href,t),i={original:e.href,protocol:e.protocol,origin:t,pathname:n,href:t+n};return this._isLinkOk(i)?i:null}},{key:"_getPathname",value:function(e,t){var n=t?e.substring(this.config.siteUrl.length):e;return n.startsWith("/")||(n="/"+n),this._shouldAddTrailingSlash(n)?n+"/":n}},{key:"_shouldAddTrailingSlash",value:function(e){return this.config.usesTrailingSlash&&!e.endsWith("/")&&!this.regex.fileExt.test(e)}},{key:"_isLinkOk",value:function(e){return null!==e&&"object"===(void 0===e?"undefined":r(e))&&(!this.prefetched.has(e.href)&&e.origin===this.config.siteUrl&&-1===e.href.indexOf("?")&&-1===e.href.indexOf("#")&&!this.regex.excludeUris.test(e.href)&&!this.regex.images.test(e.href))}}],[{key:"run",value:function(){"undefined"!=typeof RocketPreloadLinksConfig&&new n(new RocketBrowserCompatibilityChecker({capture:!0,passive:!0}),RocketPreloadLinksConfig).init()}}]),n}();t.run();
+}());
+</script>
+<script type="rocketlazyloadscript" data-minify="1" src='https://pixahive.com/wp-content/cache/min/1/wp-content/themes/hive/assets/js/similarimages.js?ver=1637246403' id='similar-images-js' defer></script>
+<script type="rocketlazyloadscript" src='https://pixahive.com/wp-content/themes/hive/assets/js/bigslide.min.js?ver=5.7.7' id='bigslide-js' defer></script>
+<script type="rocketlazyloadscript" data-minify="1" src='https://pixahive.com/wp-content/cache/min/1/wp-content/themes/hive/assets/js/custom.js?ver=1637246403' id='custom-hive-js' defer></script>
+<script type="rocketlazyloadscript" src='https://www.google.com/recaptcha/api.js?ver=5.7.7' id='g-recaptcha-js'></script>
+<script id='download-file-js-extra'>
+var ajax_var = "https:\/\/pixahive.com\/wp-admin\/admin-ajax.php";
+</script>
+<script type="rocketlazyloadscript" data-minify="1" src='https://pixahive.com/wp-content/cache/min/1/wp-content/themes/hive/assets/js/download.js?ver=1637246403' id='download-file-js' defer></script>
+<script type="rocketlazyloadscript" src='https://pixahive.com/wp-includes/js/comment-reply.min.js?ver=5.7.7' id='comment-reply-js' defer></script>
+<script id='image-moderation-js-js-extra'>
+var ajax_object = {"ajaxurl":"https:\/\/pixahive.com\/wp-admin\/admin-ajax.php","ajaxnonce":"509f29eb61"};
+</script>
+<script type="rocketlazyloadscript" data-minify="1" src='https://pixahive.com/wp-content/cache/min/1/wp-content/themes/hive/assets/js/image-moderation.js?ver=1637246404' id='image-moderation-js-js' defer></script>
+<script src='https://pixahive.com/wp-includes/js/wp-embed.min.js?ver=5.7.7' id='wp-embed-js' defer></script>
+<script type="rocketlazyloadscript" data-minify="1" defer src='https://pixahive.com/wp-content/cache/min/1/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1658883573' id='akismet-frontend-js'></script>
+<script src='https://stats.wp.com/e-202235.js' defer></script>
+<script>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:10.4',blog:'181530249',post:'218886',tz:'5.5',srv:'pixahive.com'} ]);
+	_stq.push([ 'clickTrackerInit', '181530249', '218886' ]);
+</script>
+<script>window.lazyLoadOptions={elements_selector:"img[data-lazy-src],.rocket-lazyload",data_src:"lazy-src",data_srcset:"lazy-srcset",data_sizes:"lazy-sizes",class_loading:"lazyloading",class_loaded:"lazyloaded",threshold:300,callback_loaded:function(element){if(element.tagName==="IFRAME"&&element.dataset.rocketLazyload=="fitvidscompatible"){if(element.classList.contains("lazyloaded")){if(typeof window.jQuery!="undefined"){if(jQuery.fn.fitVids){jQuery(element).parent().fitVids()}}}}}};window.addEventListener('LazyLoad::Initialized',function(e){var lazyLoadInstance=e.detail.instance;if(window.MutationObserver){var observer=new MutationObserver(function(mutations){var image_count=0;var iframe_count=0;var rocketlazy_count=0;mutations.forEach(function(mutation){for(var i=0;i<mutation.addedNodes.length;i++){if(typeof mutation.addedNodes[i].getElementsByTagName!=='function'){continue}
+if(typeof mutation.addedNodes[i].getElementsByClassName!=='function'){continue}
+images=mutation.addedNodes[i].getElementsByTagName('img');is_image=mutation.addedNodes[i].tagName=="IMG";iframes=mutation.addedNodes[i].getElementsByTagName('iframe');is_iframe=mutation.addedNodes[i].tagName=="IFRAME";rocket_lazy=mutation.addedNodes[i].getElementsByClassName('rocket-lazyload');image_count+=images.length;iframe_count+=iframes.length;rocketlazy_count+=rocket_lazy.length;if(is_image){image_count+=1}
+if(is_iframe){iframe_count+=1}}});if(image_count>0||iframe_count>0||rocketlazy_count>0){lazyLoadInstance.update()}});var b=document.getElementsByTagName("body")[0];var config={childList:!0,subtree:!0};observer.observe(b,config)}},!1)</script><script data-no-minify="1" async src="https://pixahive.com/wp-content/plugins/wp-rocket/assets/js/lazyload/17.5/lazyload.min.js"></script>
+<script type="rocketlazyloadscript">"use strict";var wprRemoveCPCSS=function wprRemoveCPCSS(){var elem;document.querySelector('link[data-rocket-async="style"][rel="preload"]')?setTimeout(wprRemoveCPCSS,200):(elem=document.getElementById("rocket-critical-css"))&&"remove"in elem&&elem.remove()};window.addEventListener?window.addEventListener("load",wprRemoveCPCSS):window.attachEvent&&window.attachEvent("onload",wprRemoveCPCSS);</script><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro%3Aital%2Cwght%400%2C400%3B0%2C700%3B1%2C400&#038;ver=5.7.7&#038;display=swap" /><link rel='stylesheet' id='wp-block-library-css'  href='https://pixahive.com/wp-includes/css/dist/block-library/style.min.css?ver=5.7.7' media='all' /><link rel='stylesheet' id='mediaelement-css'  href='https://pixahive.com/wp-includes/js/mediaelement/mediaelementplayer-legacy.min.css?ver=4.2.16' media='all' /><link rel='stylesheet' id='wp-mediaelement-css'  href='https://pixahive.com/wp-includes/js/mediaelement/wp-mediaelement.min.css?ver=5.7.7' media='all' /><link rel='stylesheet' id='edd-styles-css'  href='https://pixahive.com/wp-content/plugins/easy-digital-downloads/templates/edd.min.css?ver=2.11.3.1' media='all' /><link data-minify="1" rel='stylesheet' id='hive-style-css'  href='https://pixahive.com/wp-content/cache/min/1/wp-content/themes/hive/style.css?ver=1637246403' media='all' /><link data-minify="1" rel='stylesheet' id='hive-frontend-css'  href='https://pixahive.com/wp-content/cache/min/1/wp-content/themes/hive/assets/css/frontend.css?ver=1637246403' media='all' /><link data-minify="1" rel='stylesheet' id='fontawesome-css'  href='https://pixahive.com/wp-content/cache/min/1/wp-content/themes/hive/assets/libraries/font-awesome/css/font-awesome.min.css?ver=1637246403' media='all' /><link data-minify="1" rel='stylesheet' id='jetpack_css-css'  href='https://pixahive.com/wp-content/cache/min/1/wp-content/plugins/jetpack/css/jetpack.css?ver=1637246403' media='all' /></noscript><script defer src="https://static.cloudflareinsights.com/beacon.min.js/v652eace1692a40cfa3763df669d7439c1639079717194" integrity="sha512-Gi7xpJR8tSkrpF7aordPZQlW2DLtzUlZcumS8dMQjwDHEnw9I7ZLyiOj/6tZStRBGtGgN6ceN6cMH8z7etPGlw==" data-cf-beacon='{"rayId":"744c313968c2794d","token":"6dc103e1315c433f9305a85effe42c3d","version":"2022.8.1","si":100}' crossorigin="anonymous"></script>
+</body>
+</html>
